@@ -6,12 +6,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    mdxRs: true,
-    serverComponentsExternalPackages: ['mongoose'],
-    esmExternals: 'loose',
-    missingSuspenseWithCSRBailout: false,
-  },
   images: {
     remotePatterns: [
       {
