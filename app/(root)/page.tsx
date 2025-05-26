@@ -34,7 +34,7 @@ const Home = () => {
             <InterviewCard {...interview} key={interview.id}/>
           ))}
 
-          <p>You haven't taken any interviews yet</p>
+          {/* <p>You haven't taken any interviews yet</p> */}
         </div>
       </section>
 
@@ -46,7 +46,7 @@ const Home = () => {
             <InterviewCard {...interview} key={interview.id} />
           ))}
 
-          <p>There are no interviews available </p>
+          {/* <p>There are no interviews available </p> */}
         </div>
       </section>
     </>
