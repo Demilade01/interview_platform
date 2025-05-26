@@ -2,6 +2,9 @@ import { getRandomInterviewCover } from '@/lib/utils';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import React from 'react'
+import { Button } from './ui/button';
+import Link from 'next/link';
+import DisplayTechIcons from './DisplayTechIcons';
 
 const InterviewCard = ({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
 
@@ -17,6 +20,40 @@ const InterviewCard = ({ interviewId, userId, role, type, techstack, createdAt }
           </div>
 
           <Image  src={getRandomInterviewCover ()} alt='cover' width={90} height={90} className='rounded-full object-fit size-[90px]' />
+
+          <h3 className='mt-5 capitalize'>
+            {role} Interview
+          </h3>
+
+          <div className='flex flex-row gap-5 mt-3'>
+            <div className='flex flex-row gap-2'>
+              <Image src="/calendar.svg" alt='calendar' width={22} height={22} />
+              <p>{formattedData}</p>
+            </div>
+
+            <div className='flex flex-row gap-2 items-center'>
+              <Image src="/star.svg" alt='star' width={22} height={22} />
+
+              <p>{feedback?.totalScore || '---'}/100</p>
+            </div>
+          </div>
+
+          <p className='line-clamp-2 mt-5'>
+            {feedback?.finalAssessment || 'No feedback provided yet.'}
+          </p>
+        </div>
+
+        <div className='flex -flex-row justify-between'>
+          <DisplayTechIcons techStack={techstack}/>
+
+
+          <Button className='btn-primary'>
+            <Link href={feedback
+              ? `/interviews/${interviewId}/feedback` : `/interview/${interviewId}`
+            }>
+              {feedback ? 'Check Feedback' : 'View Interview'}
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
