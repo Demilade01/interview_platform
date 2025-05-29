@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { isAuthenticated } from "@/lib/actions/auth.actions";
+import { redirect } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,11 +20,15 @@ export const metadata: Metadata = {
   description: "An AI interview platform which helps you prepare for interviews",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isUserAuthenticated = await isAuthenticated();
+
+  if(!isUserAuthenticated) redirect('/sign-in');
+
   return (
     <html lang="en" className="dark">
       <body
