@@ -118,33 +118,44 @@ export async function isAuthenticated() {
 }
 
 export async function getInterviewsByUserId(userId: string): Promise<Interview[] | null> {
+  // Guard against undefined / empty userId to avoid invalid Firestore queries
+  if (!userId) {
+    return [];
+  }
+
   const interviews = await db
     .collection('interviews')
     .where('userId', '==', userId)
     .orderBy('createdAt', 'desc')
     .get();
 
-    return interviews.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }))as Interview[];
+  return interviews.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Interview[];
 
 }
 
 export async function getLatestInterviews(params: GetLatestInterviewsParams): Promise<Interview[] | null> {
   const {userId, limit = 20} = params;
 
-  const interviews = await db
+  // Base query for latest finalized interviews
+  let query = db
     .collection('interviews')
     .orderBy('createdAt', 'desc')
-    .where('finalized', '==', true)
-    .where('userId', '!=', userId)
-    .limit(limit)
-    .get();
+    .where('finalized', '==', true);
 
-    return interviews.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }))as Interview[];
+  // Only apply the userId filter when we actually have a userId,
+  // otherwise Firestore would receive `undefined` as a value.
+  if (userId) {
+    query = query.where('userId', '!=', userId);
+  }
+
+  const interviews = await query.limit(limit).get();
+
+  return interviews.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Interview[];
 
 }
