@@ -87,6 +87,15 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
 
   const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
 
+  const displayName = userName || 'You';
+  const initials = displayName
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <>
       <div className="call-view">
@@ -108,9 +117,11 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
 
         <div className='card-border'>
           <div className='card-content'>
-            <Image src="/user-avatar.png" alt='user' width={540} height={540} className="object-cover rounded-full size-[120px]" />
+            <div className="flex items-center justify-center rounded-full bg-primary-200 text-dark-100 font-bold text-3xl size-[120px]">
+              {initials}
+            </div>
 
-            <h3>{userName}</h3>
+            <h3>{displayName}</h3>
           </div>
         </div>
       </div>
