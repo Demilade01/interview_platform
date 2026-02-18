@@ -82,9 +82,32 @@ const AuthForm = ({ type }: { type: FormType}) => {
         toast.success("Sign in successfully")
         router.push('/')
       }
-    } catch (error) {
-      console.log(error)
-      toast.error(`There was an error: ${error}`)
+    } catch (error: unknown) {
+      const code = error && typeof error === "object" && "code" in error
+        ? (error as { code: string }).code
+        : ""
+      if (code === "auth/wrong-password" || code === "auth/invalid-credential") {
+        toast.error("Incorrect password", {
+          description: "The password you entered is wrong. Please try again or use “Forgot password” to reset it.",
+        })
+      } else if (code === "auth/user-not-found") {
+        toast.error("No account found", {
+          description: "There’s no account with this email. Please sign up first.",
+        })
+      } else if (code === "auth/too-many-requests") {
+        toast.error("Too many attempts", {
+          description: "This account is temporarily locked. Try again later or reset your password.",
+        })
+      } else if (code === "auth/invalid-email") {
+        toast.error("Invalid email", {
+          description: "Please enter a valid email address.",
+        })
+      } else {
+        console.error(error)
+        toast.error("Something went wrong", {
+          description: "Please check your details and try again.",
+        })
+      }
     }
   }
   const isSignIn = type === "sign-in"
