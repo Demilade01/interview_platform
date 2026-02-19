@@ -117,6 +117,19 @@ export async function isAuthenticated() {
   return !!user;
 }
 
+export async function signOut() {
+  const cookieStore = await cookies();
+
+  // Clear the Firebase session cookie
+  cookieStore.set('session', '', {
+    maxAge: 0,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    sameSite: 'lax',
+  });
+}
+
 export async function getInterviewsByUserId(userId: string): Promise<Interview[] | null> {
   // Guard against undefined / empty userId to avoid invalid Firestore queries
   if (!userId) {

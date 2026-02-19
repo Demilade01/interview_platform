@@ -35,7 +35,24 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased pattern`}
       >
         {children}
-        <Toaster />
+        <Toaster
+          theme="dark"
+          richColors
+          toastOptions={{
+            classNames: {
+              toast:
+                "bg-dark-200 border border-primary-200/60 text-light-100 rounded-2xl shadow-lg",
+              title: "text-light-100 font-semibold",
+              description: "text-light-200 text-sm",
+              actionButton:
+                "bg-primary-200 text-dark-100 font-semibold rounded-full px-3 py-1 hover:bg-primary-200/80",
+              cancelButton:
+                "bg-dark-100 text-light-100 rounded-full px-3 py-1 border border-input hover:bg-dark-200",
+              icon: "text-primary-200",
+              closeButton: "text-light-200 hover:text-light-100",
+            },
+          }}
+        />
       </body>
     </html>
   );
